@@ -1,0 +1,13 @@
+{
+  "name": "i18n_chr2moz",
+  "version": "0.1.0",
+  "description": "Convert Chrome I18n strings file to a mozilla .properties",
+  "author": "Guillaume Louvigny <git@ohai.fr>",
+  "engines": {
+    "node": ">=0.10"
+  },
+  "dependencies": {
+    "properties": "1.2.x"
+  },
+  "license": "MIT"
+}
