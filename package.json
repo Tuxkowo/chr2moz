@@ -7,7 +7,8 @@
     "node": ">=0.10"
   },
   "dependencies": {
-    "properties": "1.2.x"
+    "properties": "1.2.x",
+    "plist": "1.1.x"
   },
   "license": "MIT"
 }

@@ -20,7 +20,7 @@ var removeExtraneousNode = function (doc, extras) {
 };
 
 var createManifest = function (doc) {
-    var firefox_nodes = {
+    var addon_nodes = {
       browser_action: {
         scripts: true,
         height: true,
@@ -28,9 +28,12 @@ var createManifest = function (doc) {
       },
       licence: true,
       moz_id: true,
+      safari_dev_id: true,
+      safari_id: true,
+      safari_rev: true,
     };
 
-    doc = removeExtraneousNode(doc, firefox_nodes);
+    doc = removeExtraneousNode(doc, addon_nodes);
 
     return fs.writeFile(manifestFile, JSON.stringify(doc, null, '  '),
         function (err, data) {
