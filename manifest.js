@@ -31,6 +31,7 @@ var createManifest = function (doc) {
       safari_dev_id: true,
       safari_id: true,
       safari_rev: true,
+      available_locales: true,
     };
 
     doc = removeExtraneousNode(doc, addon_nodes);
