@@ -1,6 +1,7 @@
 /*jshint -W069 */
 
 var plist = require('plist');
+var concat = require('concat-files');
 var fs = require('fs');
 
 var manifestExtrasFile = process.env.PWD + '/manifest-extras.json';
@@ -75,10 +76,17 @@ var createPlist = function (data) {
         }
     }
 
+    contentScriptsArray = [];
+
     for (i in contentScripts) {
         if (contentScripts.hasOwnProperty(i)) {
-            plistData['Content']['Scripts']['End'].push(contentScripts[i]);
+            contentScriptsArray.push(contentScripts[i]);
         }
+    }
+
+    if (contentScriptsArray.length > 0) {
+        plistData['Content']['Scripts']['End'] = ['data/content_scripts.js'];
+        concat(contentScriptsArray, 'data/content_scripts.js', function() {});
     }
 
     plistData['DeveloperIdentifier'] = data.safari_dev_id;
@@ -100,7 +108,6 @@ var createPlist = function (data) {
     plistData['Permissions']['Website Access']['Include Secure Pages'] = true;
     plistData['Permissions']['Website Access']['Level'] = 'Some';
     //plistData['Website'] = '';
-
 
     return fs.writeFile(plistFile, plist.build(plistData),
         function (err, data) {

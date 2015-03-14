@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "properties": "1.2.x",
-    "plist": "1.1.x"
+    "plist": "1.1.x",
+    "concat-files": "0.1.0"
   },
   "license": "MIT"
 }
