@@ -5,6 +5,7 @@ var concat = require('concat-files');
 var fs = require('fs');
 
 var manifestExtrasFile = process.env.PWD + '/manifest-extras.json';
+var manifestExtrasJSFile = process.env.PWD + '/manifest-extras.js';
 var plistFile = process.env.PWD + '/Info.plist';
 var safariBGPage = 'safari-background.html';
 var safariBGFile = process.env.PWD + '/' + safariBGPage;
@@ -85,8 +86,22 @@ var createPlist = function (data) {
     }
 
     if (contentScriptsArray.length > 0) {
+        createManifestJS(data, function () {
+            contentScriptsArray.unshift('data/watchers/conditional-loading.js');
+            contentScriptsArray.unshift(manifestExtrasJSFile);
+
+            concat(contentScriptsArray, 'data/content_scripts.js', function () {
+                for (var i in contentScriptsArray) {
+                    if ([
+                        'data/watchers/messaging-safari.js',
+                        ].indexOf(contentScriptsArray[i]) === -1) {
+                        fs.unlink(contentScriptsArray[i]);
+                    }
+                }
+            });
+        });
+
         plistData['Content']['Scripts']['End'] = ['data/content_scripts.js'];
-        concat(contentScriptsArray, 'data/content_scripts.js', function() {});
     }
 
     plistData['DeveloperIdentifier'] = data.safari_dev_id;
@@ -136,6 +151,21 @@ var createBackground = function (data) {
             if (err) {
                 console.error('Error while writing background page');
             }
+        }
+    );
+};
+
+var createManifestJS = function (data, cb) {
+    data = 'var manifest_json = ' + JSON.stringify(data) + ';';
+
+
+    return fs.writeFile(manifestExtrasJSFile, data,
+        function (err, data) {
+            if (err) {
+                console.error('Error while writing manifest-extras.js');
+            }
+
+            cb();
         }
     );
 };
